@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::any('/test/pay','TestController@alipay');
+
+
+
+Route::get('/test/alipay/return','Alipay\PayController@aliReturn');
+Route::post('/test/alipay/notify','Alipay\PayController@notify');
