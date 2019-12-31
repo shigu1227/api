@@ -6,13 +6,11 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-
     public function alipay()
     {
-        $ali_geteway = 'https://openapi.alipaydev.com/gateway.do';
+        $ali_gateway = 'https://openapi.alipaydev.com/gateway.do';//支付网关
 
-
-        //公公请求参数
+        // 公共请求参数
         $appid = '2016101100657504';
         $method = 'alipay.trade.page.pay';
         $charset = 'utf-8';
@@ -20,60 +18,56 @@ class TestController extends Controller
         $sign = '';
         $timestamp = date('Y-m-d H:i:s');
         $version = '1.0';
-//        $notify_url = 'http://zxl.xx20.top/alipay/notify';
         $return_url = 'http://1905api.comcto.com/test/alipay/return'; //支付宝同步通知
-        $notify_url = 'http://1905api.comcto.com/test/alipay/notify'; //支付宝异步通知地
+        $notify_url = 'http://1905api.comcto.com/test/alipay/notify'; //支付宝异步通知地址
         $biz_content = '';
 
-        //  请求参数
-        $out_trade_no = time().rand(1111,9999);
+        // 请求参数
+        $out_trade_no = time().rand(1111,9999);   //商户订单号
         $product_code = 'FAST_INSTANT_TRADE_PAY';
-        $total_amount = 66.66;
-        $subject = '测试订单' .$out_trade_no;
+        $total_amout = 0.01;
+        $subject = '测试'.$out_trade_no;
 
         $request_param = [
-            'out_trade_no'  => $out_trade_no,
-            'product_code'  => $product_code,
-            'total_amount'  => $total_amount,
-            'subject'       => $subject
+            'out_trade_no'  =>$out_trade_no,
+            'product_code'  =>$product_code,
+            'total_amount'  =>$total_amout,
+            'subject'       =>$subject
         ];
 
         $param = [
-            'app_id'        => $appid,
-            'method'        => $method,
-            'charset'       => $charset,
-            'sign_type'     => $signtype,
-            'timestamp'     => $timestamp,
-            'version'       => $version,
-            'notify_url'    => $notify_url,
+            'app_id'        =>$appid,
+            'method'        =>$method,
+            'charset'       =>$charset,
+            'sign_type'     =>$signtype,
+            'timestamp'     =>$timestamp,
+            'version'       =>$version,
+            'notify_url'    =>$notify_url,
             'return_url'    => $return_url,
-            'biz_content'   => json_encode($request_param)
+            'biz_content'   =>json_encode($request_param)
         ];
 
-        $url  = 'https://openapi.alipaydev.com/gateway.do?';
-//        echo '<pre>';print_r($param);echo '</pre>';
-                //字典排序
-                ksort($param);
-//        echo '<pre>';print_r($param);echo '</pre>';
-        //2.拼接 key1=value1&key2=value2...
+        $url = 'https://openapi.alipaydev.com/gateway.do?';
+        print_r($param);
+        // 字典排序
+        ksort($param);
 
-        $str ="";
-        foreach ($param as $k=>$v)
-        {
-            $str .= $k . '=' . $v .'&';
+        // 第二步  拼接key1=value1&key2=value2，，，
+        $str = "";
+        foreach($param as $k=>$v){
+            $str .=$k . '=' .$v . '&';
         }
-//        echo 'str: '.$str;die;
+        // echo 'str:' . $str;die;
         $str = rtrim($str,'&');
-        //3 计算签名
-        $key = storage_path('keys/app_priv');
-        $prikey = file_get_contents($key);
-        $res = openssl_get_privatekey($prikey);
-//        var_dump($res);echo '</br>';
-        openssl_sign($str,$sign,$res,OPENSSL_ALGO_SHA256);
 
+        // 第三步，签名 https://docs.open.alipay.com/291/106118
+        $key = storage_path('keys/app_priv');
+        $priKey = file_get_contents($key);
+        $res = openssl_get_privatekey($priKey);
+        // var_dump($res);echo '</br>';
+        openssl_sign($str,$sign,$res,OPENSSL_ALGO_SHA256);
         $sign = base64_encode($sign);
-        $param['sign'] =$sign;
-//        var_dump($param);die;
+        $param['sign'] = $sign;
 
         //  第四部 urlencode
         $param_str = '?';
@@ -81,11 +75,10 @@ class TestController extends Controller
             $param_str .=$k. '='.urlencode($v) . '&';
         }
         $param_str = rtrim($param_str,'&');
-        $url = $ali_geteway . $param_str;
+        $url = $ali_gateway . $param_str;
         //发送GET请求
         //echo $url;die;
         header("Location:".$url);
-
 
     }
 }
