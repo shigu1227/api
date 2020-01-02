@@ -11,7 +11,7 @@
 |
 */
 
-echo 2255;die;
+
 Route::get('/', function () {
     return view('welcome');
 });
