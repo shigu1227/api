@@ -21,3 +21,10 @@ Route::any('/test/pay','TestController@alipay');
 
 Route::get('/test/alipay/return','Alipay\PayController@aliReturn');
 Route::post('/test/alipay/notify','Alipay\PayController@notify');
+
+
+//jiekou
+Route::get('/api/test','Api\TestController@test');
+Route::post('/api/user/reg','Api\TestController@reg');          //用户注册
+Route::post('/api/user/login','Api\TestController@login');      //用户登录
+Route::get('/api/user/list','Api\TestController@userList');      //用户列表
