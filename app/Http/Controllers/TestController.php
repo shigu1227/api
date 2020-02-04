@@ -81,4 +81,37 @@ class TestController extends Controller
         header("Location:".$url);
 
     }
+    public function encrypt()
+    {
+        $data = $_GET['data'];
+
+        echo "原文：".$data;echo '</br>';
+        $method = "AES-256-CBC";
+        $key = '1905api';
+        $iv = 'SHIGUSHISU011227';
+
+        $enc_data = openssl_encrypt($data,$method,$key,OPENSSL_RAW_DATA,$iv);
+        echo "加密后密文:" .$enc_data;echo '</br>';
+        echo '</<hr>';
+        echo "解密:";echo '</br>';
+        $url = "http://api.1905.com/api/decrypt?data=".base64_encode($enc_data);
+        echo $url;echo '</br>';
+        $response = file_get_contents($url);
+        echo $response;
+
+
+    }
+
+
+    public function decrypt()
+    {
+        $data = base64_encode($_GET['data ']);
+        $method = "AES-256-CBC";
+        $key = '1905api';
+        $iv = 'SHIGUSHISU011227';
+
+        $dec_data = openssl_decrypt($data,$method,$key,OPENSSL_RAW_DATA,$iv);
+        echo "解密:".$dec_data;echo '</br>';
+
+    }
 }

@@ -17,7 +17,7 @@ class TestController extends Controller
     /**
      * 用户注册
      */
-    public function reg(Request $request)
+    public function reg0(Request $request)
     {
         echo '<pre>';print_r($request->input());echo '</pre>';
         //验证用户名 验证email 验证手机号
@@ -44,7 +44,7 @@ class TestController extends Controller
      * @param Request $request
      * @return array
      */
-    public function login(Request $request)
+    public function login0(Request $request)
     {
         $name = $request->input('name');
         $pass = $request->input('pass');
@@ -81,7 +81,7 @@ class TestController extends Controller
      * 获取用户列表
      *
      */
-    public function userList()
+    public function userList0()
     {
         $user_token = $_SERVER['HTTP_TOKEN'];
         echo 'user_token: '.$user_token;echo '</br>';
@@ -100,6 +100,66 @@ class TestController extends Controller
         }
         $count = Redis::incr($redis_key);
         echo 'count: '.$count;
+    }
+
+    public function decrypt0()
+    {
+        $data = base64_encode($_GET['data ']);
+        $method = "AES-256-CBC";
+        $key = '1905api';
+        $iv = 'SHIGUSHISU011227';
+
+        $dec_data = openssl_decrypt($data,$method,$key,OPENSSL_RAW_DATA,$iv);
+        echo "解密:".$dec_data;echo '</br>';
+
+    }
+
+    /**
+     * APP注册
+     * @return bool|string
+     */
+    public function reg()
+    {
+        //请求passport
+        $url = 'http://api.1905pass.com/user/reg';
+        $response = UserModel::curlPost($url,$_POST);
+        return $response;
+    }
+    /**
+     * APP 登录
+     */
+    public function login()
+    {
+        //请求passport
+        $url = 'http://api.1905pass.com/user/login';
+        $response = UserModel::curlPost($url,$_POST);
+        return $response;
+    }
+    public function showData()
+    {
+        // 收到 token
+        $uid = $_SERVER['HTTP_UID'];
+        $token = $_SERVER['HTTP_TOKEN'];
+        // 请求passport鉴权
+        $url = 'http://passport.1905.com/api/token';         //鉴权接口
+        $response = UserModel::curlPost($url,['uid'=>$uid,'token'=>$token]);
+        $status = json_decode($response,true);
+        //处理鉴权结果
+        if($status['errno']==0)     //鉴权通过
+        {
+            $data = "sdlfkjsldfkjsdlf";
+            $response = [
+                'errno' => 0,
+                'msg'   => 'ok',
+                'data'  => $data
+            ];
+        }else{          //鉴权失败
+            $response = [
+                'errno' => 40003,
+                'msg'   => '授权失败'
+            ];
+        }
+        return $response;
     }
 
 }
