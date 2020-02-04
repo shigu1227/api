@@ -28,6 +28,9 @@ Route::post('/api/user/reg','Api\TestController@reg');          //用户注册
 Route::post('/api/user/login','Api\TestController@login');      //用户登录
 Route::get('/api/user/list','Api\TestController@userList');      //用户列表
 Route::get('/api/user/showData','Api\TestController@showData');
+Route::get('/test/postman','Api\TestController@postman');
+Route::get('/test/postman1','Api\TestController@postman1');        //接口防刷
+
 
 //凯撒加密
 Route::get('/api/accii','Api\TestController@accii');
