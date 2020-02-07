@@ -255,5 +255,32 @@ class TestController extends Controller
 
     }
 
+    //非对称加密
+    public function sign3(){
+        //代签名的数据
+        $data='世故1229';
+
+        //密钥路劲
+        $path=storage_path('keys/priv_key');
+
+        //获取公钥
+        $pkeyid=openssl_pkey_get_private("file://".$path);
+        // dump($pkeyid);die;
+        //非对称加密算法
+        openssl_sign($data,$signature,$pkeyid);
+
+        // 释放密钥资源
+        openssl_free_key($pkeyid);
+
+        //base64 编码 方便传输
+        $sign_str=base64_encode($signature);
+        $sign_url=urlencode($sign_str);
+        $url='http://api.1905pass.com/test/check3?data='.$data.'&sign='.$sign_url;
+//        echo $url;die;
+        $get=file_get_contents($url);
+        echo $get;
+
+    }
+
 
 }
