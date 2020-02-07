@@ -141,8 +141,9 @@ class TestController extends Controller
         $uid = $_SERVER['HTTP_UID'];
         $token = $_SERVER['HTTP_TOKEN'];
         // 请求passport鉴权
-        $url = 'http://passport.1905.com/api/token';         //鉴权接口
+        $url = 'http://api.1905pass.com/user/token';         //鉴权接口
         $response = UserModel::curlPost($url,['uid'=>$uid,'token'=>$token]);
+        echo $response;die;
         $status = json_decode($response,true);
         //处理鉴权结果
         if($status['errno']==0)     //鉴权通过

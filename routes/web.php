@@ -29,7 +29,7 @@ Route::post('/api/user/login','Api\TestController@login');      //用户登录
 Route::get('/api/user/list','Api\TestController@userList');      //用户列表
 Route::get('/api/user/showData','Api\TestController@showData');
 Route::get('/test/postman','Api\TestController@postman');
-Route::get('/test/postman1','Api\TestController@postman1');        //接口防刷
+Route::get('/test/postman1','Api\TestController@postman1')->middleware('filter','check.token');        //接口防刷
 
 
 //凯撒加密
