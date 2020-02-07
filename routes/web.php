@@ -32,6 +32,7 @@ Route::get('/test/postman','Api\TestController@postman');
 Route::get('/test/postman1','Api\TestController@postman1')->middleware('filter','check.token');        //接口防刷
 
 Route::get('/test/md5','Api\TestController@md5test');
+Route::get('/test/sign2','Api\TestController@sign2');
 
 
 //凯撒加密
