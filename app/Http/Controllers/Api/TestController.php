@@ -282,5 +282,25 @@ class TestController extends Controller
 
     }
 
+    //对称加密
+    public function aes(){
+        //要加密的数据
+        $str='世俗1229';
+        $method='AES-256-CBC';  //加密方式
+        $key='zhangxiaoleshiguxyx';    //加密的密钥
+        $iv='zhangxiaolexyxaa';       //必须为16位
+
+        //加密函数进行加密
+        $enc=openssl_encrypt($str,$method,$key,OPENSSL_RAW_DATA,$iv);
+        echo $enc;
+        //不可读模式转换成可读模式
+        $str_base=base64_encode($enc);
+        //转换为可传输数据类型
+        $str_url=urlencode($str_base);
+        $url='http://api.1905pass.com/test/aes?str='.$str_url;
+        $g=file_get_contents($url);
+        echo $g;
+    }
+
 
 }

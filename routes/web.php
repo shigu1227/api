@@ -34,7 +34,7 @@ Route::get('/test/postman1','Api\TestController@postman1')->middleware('filter',
 Route::get('/test/md5','Api\TestController@md5test');
 Route::get('/test/sign2','Api\TestController@sign2');
 Route::get('/test/sign3','Api\TestController@sign3');
-
+Route::get('/test/aes','Api\TestController@aes');//对称加密
 
 //凯撒加密
 Route::get('/api/accii','Api\TestController@accii');
